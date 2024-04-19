@@ -17,56 +17,18 @@ class OAuth2:
             'redirect_uri': self.redirect_uri,
             'code': self.code
         }
-        client = BackendApplicationClient(client_id=self.client_id)
-        oauth = OAuth2Session(client=client)
-        response = oauth.post(self.token_url, json)
+        response = self.OauthPost(json)
 
     def RefreshToken(self):
         json = {
             'grant_type': 'refresh_token',
-            'client_id': clientId,
-            'client_secret': clientSecret,
+            'client_id': self.client_id,
+            'client_secret': self.client_secret,
             'refresh_token': ''
         }
+        response = self.OauthPost(json)
+
+    def OauthPost(self, json):
         client = BackendApplicationClient(client_id=self.client_id)
         oauth = OAuth2Session(client=client)
-        response = oauth.post(self.token_url, json)
-
-clientId = '661d332d84600b425d6e5703'
-clientSecret = ''
-authorizationCode = 'a8sd7fas87fd8a9s7d99'
-redirect_uri = 'http://localhost:13653/oauth/callback.aspx'
-token_url = 'https://erp.varejonline.com.br/apps/oauth/token'
-
-token = ''
-refreshToken = ''
-
-client = BackendApplicationClient(client_id=clientId)
-oauth = OAuth2Session(client=client)
-
-token_request_data = {
-    'grant_type' : 'authorization_code',
-    'client_id' : clientId,
-    'client_secret' : clientSecret,
-    'redirect_uri' : redirect_uri,
-    'code' : authorizationCode
-}
-
-token_refresh_data = {
-    'grant_type': 'refresh_token',
-    'client_id': clientId,
-    'client_secret': clientSecret,
-    'refresh_token': ''
-}
-
-# get token access
-token_response = oauth.post(token_url, data=token_request_data)
-
-# refresh token
-token_response = oauth.post(token_url, data=token_refresh_data)
-
-def GetToken():
-    return token
-def SetToken(value):
-    token = value
-
+        return oauth.post(self.token_url, json)
